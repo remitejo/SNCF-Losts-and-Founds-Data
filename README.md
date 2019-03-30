@@ -877,34 +877,3 @@ lostObjects.loc[lostObjects["object_nature"].isin(topDeclaredObjectNature)].grou
 
 ![png](output_38_1.png)
 
-
-EXPERIMENTING NEW STUFF
-
-#Do people lose more their electronic devices in station with wireless ?
-
-electronicsDevicesLost = pd.DataFrame(list(mydb["foundObjects"].aggregate([
-    {"$match":{"object_type":{"$eq":"Appareils électroniques, informatiques, appareils photo"}}}
-    ,{"$lookup":{"from":"stationList"
-                ,"let":{ "uic":"$uic"}
-                ,"pipeline":[
-                    {"$match":
-                        {"$expr":
-                            #{"$and":[
-                            #    {"$eq":["$type","2016"]},
-                                {"$eq":["$uic_code","$$uic"]}
-                            #]}
-                        }
-                    }
-                ]
-                ,"as":"join"
-                }
-     }
-    #,{"$replaceRoot": { "newRoot": { "$mergeObjects": [ { "$arrayElemAt": [ "$join", 0 ] }, "$$ROOT" ] } }}
-    #,{ "$project": { "join": 0, "uic_code":0 } }
-    #,{"$group":{"_id":"$uic_code","count":{"$sum":1}}}
-])))
-
-electronicsDevicesLost
-
-pd.DataFrame(list(mydb["stationLine"].aggregate([
-    {"$match":{"object_type":{"$eq":"Appareils électroniques, informatiques, appareils photo"}}}
